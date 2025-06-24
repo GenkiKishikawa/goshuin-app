@@ -1,0 +1,9 @@
+version: '3'
+services:
+  app:
+    image: node:22-bookworm
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/src
+    entrypoint: tail -f /dev/null
