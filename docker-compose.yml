@@ -3,7 +3,14 @@ services:
   frontend:
     image: node:22-bookworm
     ports:
-      - "3000:3000"
+      - "3001:3001"
     volumes:
       - ./frontend/:/src
+    entrypoint: tail -f /dev/null
+  root:
+    image: node:22-bookworm
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/src
     entrypoint: tail -f /dev/null

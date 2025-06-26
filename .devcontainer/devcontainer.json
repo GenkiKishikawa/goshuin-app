@@ -1,6 +1,6 @@
 {
   "dockerComposeFile": "../docker-compose.yml",
-  "service": "frontend",
+  "service": "root",
   "workspaceFolder": "/src",
   "customizations": {
     "vscode": {
