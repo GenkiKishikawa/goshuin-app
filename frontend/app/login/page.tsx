@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpen, Mail } from 'lucide-react';
-import { FaGoogle, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { FaGoogle, FaTwitter } from 'react-icons/fa';
 import { SiLine } from 'react-icons/si';
 
 export default function LoginPage() {
@@ -84,16 +84,6 @@ export default function LoginPage() {
                   >
                     <FaTwitter className="mr-2 h-4 w-4" />
                     Twitterでログイン
-                  </Button>
-                  <Button
-                    onClick={() => handleSocialLogin('instagram')}
-                    disabled={isLoading}
-                    className="w-full"
-                    variant="outline"
-                    size="lg"
-                  >
-                    <FaInstagram className="mr-2 h-4 w-4" />
-                    Instagramでログイン
                   </Button>
                   <Button
                     onClick={() => handleSocialLogin('line')}
@@ -180,16 +170,6 @@ export default function LoginPage() {
                     Twitterで登録
                   </Button>
                   <Button
-                    onClick={() => handleSocialLogin('instagram')}
-                    disabled={isLoading}
-                    className="w-full"
-                    variant="outline"
-                    size="lg"
-                  >
-                    <FaInstagram className="mr-2 h-4 w-4" />
-                    Instagramで登録
-                  </Button>
-                  <Button
                     onClick={() => handleSocialLogin('line')}
                     disabled={isLoading}
                     className="w-full"
@@ -260,6 +240,30 @@ export default function LoginPage() {
           <Link href="#" className="text-red-600 hover:underline">プライバシーポリシー</Link>
           に同意したものとみなされます。
         </p>
+
+        <div className="mt-8 text-center">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-gray-300" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-2 text-gray-500">または</span>
+            </div>
+          </div>
+          <div className="mt-6">
+            <Button
+              variant="ghost"
+              size="lg"
+              className="w-full text-gray-600 hover:text-gray-900"
+              onClick={() => router.push('/dashboard')}
+            >
+              ログインせずに見る
+            </Button>
+            <p className="text-xs text-gray-500 mt-2">
+              一部の機能は制限されます
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

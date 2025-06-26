@@ -76,9 +76,11 @@ export default function Home() {
                     無料で始める
                   </Button>
                 </Link>
-                <Button size="lg" variant="outline" className="border-red-200 text-red-700 hover:bg-red-50 text-lg px-8 py-3">
-                  機能を見る
-                </Button>
+                <Link href="/dashboard">
+                  <Button size="lg" variant="outline" className="border-red-200 text-red-700 hover:bg-red-50 text-lg px-8 py-3">
+                    ログインせずに見る
+                  </Button>
+                </Link>
               </div>
             </div>
             <div className="relative">
@@ -164,11 +166,18 @@ export default function Home() {
           <p className="text-xl text-red-100 mb-8">
             無料登録で、すべての機能をご利用いただけます
           </p>
-          <Link href="/login">
-            <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-3">
-              無料で始める
-            </Button>
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/login">
+              <Button size="lg" className="bg-white text-red-600 hover:bg-gray-100 text-lg px-8 py-3">
+                無料で始める
+              </Button>
+            </Link>
+            <Link href="/dashboard">
+              <Button size="lg" variant="outline" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-red-600 text-lg px-8 py-3">
+                ログインせずに見る
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
