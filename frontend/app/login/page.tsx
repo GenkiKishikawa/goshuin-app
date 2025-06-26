@@ -3,23 +3,28 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpen, Mail } from 'lucide-react';
+import { FaGoogle, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { SiLine } from 'react-icons/si';
 
 export default function LoginPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleGoogleLogin = async () => {
+  const handleSocialLogin = async (provider: string) => {
     setIsLoading(true);
-    // モック認証 - 実際はGoogle認証を実装
-    setTimeout(() => {
-      router.push('/dashboard');
-    }, 1000);
+    try {
+      await signIn(provider, { callbackUrl: '/dashboard' });
+    } catch (error) {
+      console.error('Login error:', error);
+      setIsLoading(false);
+    }
   };
 
   const handleEmailLogin = async (e: React.FormEvent) => {
@@ -59,15 +64,48 @@ export default function LoginPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Button
-                  onClick={handleGoogleLogin}
-                  disabled={isLoading}
-                  className="w-full bg-red-600 hover:bg-red-700"
-                  size="lg"
-                >
-                  <Mail className="mr-2 h-4 w-4" />
-                  Googleでログイン
-                </Button>
+                <div className="space-y-3">
+                  <Button
+                    onClick={() => handleSocialLogin('google')}
+                    disabled={isLoading}
+                    className="w-full"
+                    variant="outline"
+                    size="lg"
+                  >
+                    <FaGoogle className="mr-2 h-4 w-4" />
+                    Googleでログイン
+                  </Button>
+                  <Button
+                    onClick={() => handleSocialLogin('twitter')}
+                    disabled={isLoading}
+                    className="w-full"
+                    variant="outline"
+                    size="lg"
+                  >
+                    <FaTwitter className="mr-2 h-4 w-4" />
+                    Twitterでログイン
+                  </Button>
+                  <Button
+                    onClick={() => handleSocialLogin('instagram')}
+                    disabled={isLoading}
+                    className="w-full"
+                    variant="outline"
+                    size="lg"
+                  >
+                    <FaInstagram className="mr-2 h-4 w-4" />
+                    Instagramでログイン
+                  </Button>
+                  <Button
+                    onClick={() => handleSocialLogin('line')}
+                    disabled={isLoading}
+                    className="w-full"
+                    variant="outline"
+                    size="lg"
+                  >
+                    <SiLine className="mr-2 h-4 w-4" />
+                    LINEでログイン
+                  </Button>
+                </div>
                 
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
@@ -120,15 +158,48 @@ export default function LoginPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Button
-                  onClick={handleGoogleLogin}
-                  disabled={isLoading}
-                  className="w-full bg-red-600 hover:bg-red-700"
-                  size="lg"
-                >
-                  <Mail className="mr-2 h-4 w-4" />
-                  Googleで登録
-                </Button>
+                <div className="space-y-3">
+                  <Button
+                    onClick={() => handleSocialLogin('google')}
+                    disabled={isLoading}
+                    className="w-full"
+                    variant="outline"
+                    size="lg"
+                  >
+                    <FaGoogle className="mr-2 h-4 w-4" />
+                    Googleで登録
+                  </Button>
+                  <Button
+                    onClick={() => handleSocialLogin('twitter')}
+                    disabled={isLoading}
+                    className="w-full"
+                    variant="outline"
+                    size="lg"
+                  >
+                    <FaTwitter className="mr-2 h-4 w-4" />
+                    Twitterで登録
+                  </Button>
+                  <Button
+                    onClick={() => handleSocialLogin('instagram')}
+                    disabled={isLoading}
+                    className="w-full"
+                    variant="outline"
+                    size="lg"
+                  >
+                    <FaInstagram className="mr-2 h-4 w-4" />
+                    Instagramで登録
+                  </Button>
+                  <Button
+                    onClick={() => handleSocialLogin('line')}
+                    disabled={isLoading}
+                    className="w-full"
+                    variant="outline"
+                    size="lg"
+                  >
+                    <SiLine className="mr-2 h-4 w-4" />
+                    LINEで登録
+                  </Button>
+                </div>
                 
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
