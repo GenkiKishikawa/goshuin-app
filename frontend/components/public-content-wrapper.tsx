@@ -1,6 +1,6 @@
 "use client"
 
-import { useOptionalAuth } from "@/lib/auth"
+import { useAuth } from "@/components/providers/auth-provider"
 import { ReactNode } from "react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
@@ -17,9 +17,9 @@ export function PublicContentWrapper({
   requireAuth = false,
   authMessage = "この機能を利用するにはログインが必要です"
 }: PublicContentWrapperProps) {
-  const { isAuthenticated } = useOptionalAuth()
+  const { user } = useAuth()
 
-  if (requireAuth && !isAuthenticated) {
+  if (requireAuth && !user) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] p-8">
         <div className="text-center space-y-4">

@@ -3,26 +3,33 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import { useAuth } from '@/components/providers/auth-provider';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, Mail } from 'lucide-react';
-import { FaGoogle, FaTwitter } from 'react-icons/fa';
-import { SiLine } from 'react-icons/si';
+import { BookOpen } from 'lucide-react';
+import { FaGoogle } from 'react-icons/fa';
+import { toast } from 'sonner';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { signIn, signUp, signInWithGoogle } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
 
-  const handleSocialLogin = async (provider: string) => {
+  const handleSocialLogin = async () => {
     setIsLoading(true);
     try {
-      await signIn(provider, { callbackUrl: '/dashboard' });
+      await signInWithGoogle();
+      toast.success('ログインしました');
+      router.push('/dashboard');
     } catch (error) {
       console.error('Login error:', error);
+      toast.error('ログインに失敗しました');
       setIsLoading(false);
     }
   };
@@ -30,10 +37,29 @@ export default function LoginPage() {
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // モック認証 - 実際はメール認証を実装
-    setTimeout(() => {
+    try {
+      await signIn(email, password);
+      toast.success('ログインしました');
       router.push('/dashboard');
-    }, 1000);
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error('ログインに失敗しました');
+      setIsLoading(false);
+    }
+  };
+
+  const handleEmailSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      await signUp(email, password);
+      toast.success('アカウントを作成しました。確認メールをチェックしてください。');
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Signup error:', error);
+      toast.error('アカウント作成に失敗しました');
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -66,7 +92,7 @@ export default function LoginPage() {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <Button
-                    onClick={() => handleSocialLogin('google')}
+                    onClick={handleSocialLogin}
                     disabled={isLoading}
                     className="w-full"
                     variant="outline"
@@ -74,26 +100,6 @@ export default function LoginPage() {
                   >
                     <FaGoogle className="mr-2 h-4 w-4" />
                     Googleでログイン
-                  </Button>
-                  <Button
-                    onClick={() => handleSocialLogin('twitter')}
-                    disabled={isLoading}
-                    className="w-full"
-                    variant="outline"
-                    size="lg"
-                  >
-                    <FaTwitter className="mr-2 h-4 w-4" />
-                    Twitterでログイン
-                  </Button>
-                  <Button
-                    onClick={() => handleSocialLogin('line')}
-                    disabled={isLoading}
-                    className="w-full"
-                    variant="outline"
-                    size="lg"
-                  >
-                    <SiLine className="mr-2 h-4 w-4" />
-                    LINEでログイン
                   </Button>
                 </div>
                 
@@ -113,6 +119,8 @@ export default function LoginPage() {
                       id="email"
                       type="email"
                       placeholder="your@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </div>
@@ -122,6 +130,8 @@ export default function LoginPage() {
                       id="password"
                       type="password"
                       placeholder="パスワードを入力"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                     />
                   </div>
@@ -150,7 +160,7 @@ export default function LoginPage() {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <Button
-                    onClick={() => handleSocialLogin('google')}
+                    onClick={handleSocialLogin}
                     disabled={isLoading}
                     className="w-full"
                     variant="outline"
@@ -158,26 +168,6 @@ export default function LoginPage() {
                   >
                     <FaGoogle className="mr-2 h-4 w-4" />
                     Googleで登録
-                  </Button>
-                  <Button
-                    onClick={() => handleSocialLogin('twitter')}
-                    disabled={isLoading}
-                    className="w-full"
-                    variant="outline"
-                    size="lg"
-                  >
-                    <FaTwitter className="mr-2 h-4 w-4" />
-                    Twitterで登録
-                  </Button>
-                  <Button
-                    onClick={() => handleSocialLogin('line')}
-                    disabled={isLoading}
-                    className="w-full"
-                    variant="outline"
-                    size="lg"
-                  >
-                    <SiLine className="mr-2 h-4 w-4" />
-                    LINEで登録
                   </Button>
                 </div>
                 
@@ -190,31 +180,37 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                <form onSubmit={handleEmailLogin} className="space-y-4">
+                <form onSubmit={handleEmailSignUp} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">お名前</Label>
+                    <Label htmlFor="register-name">お名前</Label>
                     <Input
-                      id="name"
+                      id="register-name"
                       type="text"
                       placeholder="山田 太郎"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">メールアドレス</Label>
+                    <Label htmlFor="register-email">メールアドレス</Label>
                     <Input
-                      id="email"
+                      id="register-email"
                       type="email"
                       placeholder="your@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="password">パスワード</Label>
+                    <Label htmlFor="register-password">パスワード</Label>
                     <Input
-                      id="password"
+                      id="register-password"
                       type="password"
                       placeholder="8文字以上のパスワード"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                     />
                   </div>

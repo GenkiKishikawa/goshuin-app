@@ -25,6 +25,7 @@ npm run lint         # ESLintを実行（開発中はチェック、ビルド時
 ### 技術スタック
 - **Next.js 15.3.4** App Routerと静的エクスポート
 - **TypeScript 5.2.2** strictモード
+- **Supabase** 認証とデータベース
 - **Tailwind CSS** カスタムアニメーション付き
 - **Shadcn/ui** コンポーネントライブラリ（50以上のビルド済みコンポーネント）
 - **React Hook Form + Zod** フォーム処理とバリデーション

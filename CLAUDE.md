@@ -30,7 +30,10 @@ docker-compose up    # ルートとフロントエンドのコンテナを起動
   - 全データは `lib/mock-data.ts` でモック化
 
 ### 主要な技術的決定事項
-- **フロントエンドのみ**: バックエンド未実装
+- **フロントエンド**: Next.js 15
+- **バックエンド**: FastAPI（将来実装予定）
+- **データベース**: PostgreSQL（Supabase使用）
+- **認証**: Supabase Auth（NextAuth.jsは使用しない）
 - **静的エクスポート**: サーバーなしでCDNデプロイ可能
 - **コンポーネントライブラリ**: 一貫性のあるアクセシブルなUIのためShadcn/ui使用
 - **フォーム処理**: React Hook Form + Zodでバリデーション
@@ -44,6 +47,10 @@ docker-compose up    # ルートとフロントエンドのコンテナを起動
 5. **発見機能** - 神社を探すマップビュー
 
 ### 開発パターン
+
+修正前に `/src/frontend/CLAUDE.md` を確認し、以下のガイドラインに従うこと。
+
+修正前に `/src/documents/` のドキュメントを確認し、要件を満たすこと。
 
 コンポーネント修正時:
 - 新規作成前に `/src/frontend/components/ui/` の既存Shadcnコンポーネントを確認
