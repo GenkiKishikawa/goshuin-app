@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import Header from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -83,10 +84,11 @@ export default function PostPage() {
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {images.map((image, index) => (
                       <div key={index} className="relative aspect-square rounded-lg overflow-hidden">
-                        <img
+                        <Image
                           src={image}
                           alt={`アップロード画像 ${index + 1}`}
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
                         />
                         <button
                           type="button"

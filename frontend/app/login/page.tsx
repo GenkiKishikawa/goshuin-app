@@ -3,32 +3,63 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/providers/auth-provider';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, Mail } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
+import { FaGoogle } from 'react-icons/fa';
+import { toast } from 'sonner';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { signIn, signUp, signInWithGoogle } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
 
-  const handleGoogleLogin = async () => {
+  const handleSocialLogin = async () => {
     setIsLoading(true);
-    // モック認証 - 実際はGoogle認証を実装
-    setTimeout(() => {
+    try {
+      await signInWithGoogle();
+      toast.success('ログインしました');
       router.push('/dashboard');
-    }, 1000);
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error('ログインに失敗しました');
+      setIsLoading(false);
+    }
   };
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // モック認証 - 実際はメール認証を実装
-    setTimeout(() => {
+    try {
+      await signIn(email, password);
+      toast.success('ログインしました');
       router.push('/dashboard');
-    }, 1000);
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error('ログインに失敗しました');
+      setIsLoading(false);
+    }
+  };
+
+  const handleEmailSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      await signUp(email, password);
+      toast.success('アカウントを作成しました。確認メールをチェックしてください。');
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Signup error:', error);
+      toast.error('アカウント作成に失敗しました');
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -59,15 +90,18 @@ export default function LoginPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Button
-                  onClick={handleGoogleLogin}
-                  disabled={isLoading}
-                  className="w-full bg-red-600 hover:bg-red-700"
-                  size="lg"
-                >
-                  <Mail className="mr-2 h-4 w-4" />
-                  Googleでログイン
-                </Button>
+                <div className="space-y-3">
+                  <Button
+                    onClick={handleSocialLogin}
+                    disabled={isLoading}
+                    className="w-full"
+                    variant="outline"
+                    size="lg"
+                  >
+                    <FaGoogle className="mr-2 h-4 w-4" />
+                    Googleでログイン
+                  </Button>
+                </div>
                 
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
@@ -85,6 +119,8 @@ export default function LoginPage() {
                       id="email"
                       type="email"
                       placeholder="your@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </div>
@@ -94,6 +130,8 @@ export default function LoginPage() {
                       id="password"
                       type="password"
                       placeholder="パスワードを入力"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                     />
                   </div>
@@ -120,15 +158,18 @@ export default function LoginPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Button
-                  onClick={handleGoogleLogin}
-                  disabled={isLoading}
-                  className="w-full bg-red-600 hover:bg-red-700"
-                  size="lg"
-                >
-                  <Mail className="mr-2 h-4 w-4" />
-                  Googleで登録
-                </Button>
+                <div className="space-y-3">
+                  <Button
+                    onClick={handleSocialLogin}
+                    disabled={isLoading}
+                    className="w-full"
+                    variant="outline"
+                    size="lg"
+                  >
+                    <FaGoogle className="mr-2 h-4 w-4" />
+                    Googleで登録
+                  </Button>
+                </div>
                 
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
@@ -139,31 +180,37 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                <form onSubmit={handleEmailLogin} className="space-y-4">
+                <form onSubmit={handleEmailSignUp} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">お名前</Label>
+                    <Label htmlFor="register-name">お名前</Label>
                     <Input
-                      id="name"
+                      id="register-name"
                       type="text"
                       placeholder="山田 太郎"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">メールアドレス</Label>
+                    <Label htmlFor="register-email">メールアドレス</Label>
                     <Input
-                      id="email"
+                      id="register-email"
                       type="email"
                       placeholder="your@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="password">パスワード</Label>
+                    <Label htmlFor="register-password">パスワード</Label>
                     <Input
-                      id="password"
+                      id="register-password"
                       type="password"
                       placeholder="8文字以上のパスワード"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                     />
                   </div>
@@ -189,6 +236,30 @@ export default function LoginPage() {
           <Link href="#" className="text-red-600 hover:underline">プライバシーポリシー</Link>
           に同意したものとみなされます。
         </p>
+
+        <div className="mt-8 text-center">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-gray-300" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-2 text-gray-500">または</span>
+            </div>
+          </div>
+          <div className="mt-6">
+            <Button
+              variant="ghost"
+              size="lg"
+              className="w-full text-gray-600 hover:text-gray-900"
+              onClick={() => router.push('/dashboard')}
+            >
+              ログインせずに見る
+            </Button>
+            <p className="text-xs text-gray-500 mt-2">
+              一部の機能は制限されます
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
