@@ -7,6 +7,34 @@ services:
     volumes:
       - ./frontend/:/src
     entrypoint: tail -f /dev/null
+  
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/gosyuin_db
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
+      - SECRET_KEY=${SECRET_KEY:-your-secret-key-here}
+      - FRONTEND_URL=http://localhost:3000
+    depends_on:
+      - db
+  
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=gosyuin_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  
   root:
     image: node:22-bookworm
     ports:
@@ -14,3 +42,6 @@ services:
     volumes:
       - .:/src
     entrypoint: tail -f /dev/null
+
+volumes:
+  postgres_data:
