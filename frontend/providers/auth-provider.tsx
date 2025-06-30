@@ -110,7 +110,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   /**
-   * Googleアカウントでログインする関数
+   * Googleアカウントでログインする関数（PKCE flow対応）
    * 
    * @param redirectTo - ログイン成功後のリダイレクト先URL（オプション）
    * @throws エラーが発生した場合は例外をスロー
@@ -121,10 +121,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const redirectUrl = currentPath === '/login' ? '/dashboard' : currentPath
     const finalRedirect = redirectTo || redirectUrl
 
+    // PKCE flowでGoogle認証を実行
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: finalRedirect // 認証成功後のリダイレクト先
+        // PKCE flowでは認証後にコールバックページに一度リダイレクト
+        redirectTo: `${window.location.origin}/auth/callback?redirect_to=${encodeURIComponent(finalRedirect)}`,
+        // セキュリティ向上のためqueryParamsを使用
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        }
       }
     })
     if (error) throw error
