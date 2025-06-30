@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Header from '@/components/Header';
 import PostCard from '@/components/PostCard';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -42,14 +43,15 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* メインコンテンツ */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* ウェルカムカード */}
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* メインコンテンツ */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* ウェルカムカード */}
             <Card className="bg-gradient-to-r from-red-500 to-red-600 text-white border-0">
               <CardHeader>
                 <CardTitle className="text-2xl">おかえりなさい、{mockUser.name}さん</CardTitle>
@@ -194,5 +196,6 @@ export default function DashboardPage() {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 }

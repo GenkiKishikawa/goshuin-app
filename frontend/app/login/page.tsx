@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/components/providers/auth-provider';
+import { useAuth } from '@/providers/auth-provider';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -21,12 +21,20 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
 
+  /**
+   * ソーシャルログイン処理（PKCE flow対応）
+   * 
+   * GoogleOAuth認証を実行する。PKCE flowでは認証後に
+   * コールバックページにリダイレクトされ、そこでセッション確立後に
+   * 最終的な遷移先にリダイレクトされる。
+   */
   const handleSocialLogin = async () => {
     setIsLoading(true);
     try {
-      await signInWithGoogle();
+      // PKCE flowでGoogle認証を開始（リダイレクト先を指定）
+      await signInWithGoogle('/dashboard');
+      // 認証成功時はリダイレクトされるため、ここは実行されない
       toast.success('ログインしました');
-      router.push('/dashboard');
     } catch (error) {
       console.error('Login error:', error);
       toast.error('ログインに失敗しました');

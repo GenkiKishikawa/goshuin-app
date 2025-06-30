@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Header from '@/components/Header';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -55,20 +56,21 @@ export default function PostPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">新しい投稿を作成</h1>
-          <p className="text-lg text-gray-600">
-            あなたの御朱印体験を記録・共有しましょう
-          </p>
-        </div>
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">新しい投稿を作成</h1>
+            <p className="text-lg text-gray-600">
+              あなたの御朱印体験を記録・共有しましょう
+            </p>
+          </div>
 
-        <form onSubmit={handleSubmit} className="space-y-8">
-          {/* 画像アップロード */}
-          <Card>
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {/* 画像アップロード */}
+            <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Camera className="w-5 h-5" />
@@ -277,8 +279,9 @@ export default function PostPage() {
               {isSubmitting ? '投稿中...' : '投稿する'}
             </Button>
           </div>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 }

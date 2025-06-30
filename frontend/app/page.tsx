@@ -4,7 +4,17 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { BookOpen, Users, Trophy, MapPin, Camera, Heart } from 'lucide-react';
 
+/**
+ * ホームページコンポーネント
+ * 
+ * アプリケーションのランディングページ。
+ * ヒーローセクション、機能紹介、統計情報、CTAを表示し、
+ * 新規ユーザーにサービスの価値を伝える。
+ * 
+ * @returns ホームページのJSX要素
+ */
 export default function Home() {
+  // アプリケーションの主要機能を説明するデータ配列
   const features = [
     {
       icon: Camera,
@@ -30,7 +40,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-red-50 to-white">
-      {/* ヘッダー */}
+      {/* ヘッダーセクション - ロゴ、ナビゲーション、認証ボタン */}
       <header className="bg-white/80 backdrop-blur-md border-b border-red-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -56,7 +66,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ヒーローセクション */}
+      {/* ヒーローセクション - メインメッセージとCTAボタン */}
       <section className="relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -101,7 +111,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 機能紹介 */}
+      {/* 機能紹介セクション - アプリの主要機能をカード形式で紹介 */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -113,6 +123,7 @@ export default function Home() {
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* 機能リストをマップしてカードコンポーネントとして表示 */}
             {features.map((feature, index) => (
               <Card key={index} className="border-red-100 hover:shadow-lg transition-shadow duration-300">
                 <CardContent className="p-6 text-center">
@@ -132,7 +143,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 統計セクション */}
+      {/* 統計セクション - サービスの利用状況を数値で表示し信頼性をアピール */}
       <section className="py-24 bg-red-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -157,7 +168,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* CTAセクション - ユーザーにアクションを促す最終的な呼びかけ */}
       <section className="py-24 bg-gradient-to-r from-red-600 to-red-700">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold text-white mb-6">
@@ -181,7 +192,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* フッター */}
+      {/* フッターセクション - サイトの基本情報とコピーライト */}
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
