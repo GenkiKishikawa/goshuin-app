@@ -6,4 +6,7 @@ services:
       - "3000:3000"
     volumes:
       - .:/src
+    environment:
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
     entrypoint: tail -f /dev/null
