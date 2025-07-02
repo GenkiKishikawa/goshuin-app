@@ -6,34 +6,26 @@ services:
       - "3001:3001"
     volumes:
       - ./frontend/:/src
+    environment:
+      - NEXT_PUBLIC_SUPABASE_URL=${SUPABASE_URL}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
     entrypoint: tail -f /dev/null
   
   backend:
     build: ./backend
+    # image: python:3.11-buster
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app
+      - ./backend/.dockervenv:/src/.venv
+      - ./backend:/src
     environment:
-      - DATABASE_URL=postgresql://user:password@db:5432/gosyuin_db
+      - DATABASE_URL=${SUPABASE_DB_URL}
       - SUPABASE_URL=${SUPABASE_URL}
-      - SUPABASE_KEY=${SUPABASE_KEY}
+      - SUPABASE_KEY=${SUPABASE_ANON_KEY}
       - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
       - SECRET_KEY=${SECRET_KEY:-your-secret-key-here}
       - FRONTEND_URL=http://localhost:3000
-    depends_on:
-      - db
-  
-  db:
-    image: postgres:15-alpine
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=gosyuin_db
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
   
   root:
     image: node:22-bookworm
@@ -42,6 +34,3 @@ services:
     volumes:
       - .:/src
     entrypoint: tail -f /dev/null
-
-volumes:
-  postgres_data:
