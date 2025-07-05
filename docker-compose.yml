@@ -13,7 +13,6 @@ services:
   
   backend:
     build: ./backend
-    # image: python:3.11-buster
     ports:
       - "8000:8000"
     volumes:
@@ -26,6 +25,7 @@ services:
       - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
       - SECRET_KEY=${SECRET_KEY:-your-secret-key-here}
       - FRONTEND_URL=http://localhost:3000
+    entrypoint: /src/entrypoint.sh
   
   root:
     image: node:22-bookworm
