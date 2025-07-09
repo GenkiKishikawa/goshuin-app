@@ -4,14 +4,15 @@ from pydantic import BaseModel
 from typing import Optional, List
 import os
 from dotenv import load_dotenv
+from app.core.config import settings
 
 load_dotenv()
 
 app = FastAPI()
 
 supabase: Client = create_client(
-    os.getenv("SUPABASE_URL"), 
-    os.getenv("SUPABASE_KEY")
+    settings.SUPABASE_URL,
+    settings.SUPABASE_ANON_KEY
 )
 
 class User(BaseModel):
@@ -29,7 +30,7 @@ def get_users():
         response = supabase.table("users").select("*").execute()
         return response.data
     except Exception as e:
-        raise Exception(f"Error fetching users: {e}")
+        raise e
 
 
 @app.get("/debug/connection")
