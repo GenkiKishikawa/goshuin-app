@@ -21,7 +21,7 @@ services:
     environment:
       - DATABASE_URL=${SUPABASE_DB_URL}
       - SUPABASE_URL=${SUPABASE_URL}
-      - SUPABASE_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
       - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
       - SECRET_KEY=${SECRET_KEY:-your-secret-key-here}
       - FRONTEND_URL=http://localhost:3000
