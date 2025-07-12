@@ -1,4 +1,4 @@
-// 神社・御朱印投稿サービス データベース設計
+// 神社・御朱印投稿サービス データベース設計（最適化版）
 
 // Note: Supabase Auth関連テーブル (auth.users等) は自動管理されるため除外
 
@@ -11,6 +11,7 @@ Table users {
   id UUID [pk, ref: > auth.users.id, note: 'Supabase auth.usersと連携']
   username VARCHAR(100) [unique, not null]
   email VARCHAR(255) [unique, not null, note: 'auth.usersから同期']
+  role_id BIGINT [not null, ref: > roles.id, default: 2, note: 'デフォルトは一般ユーザー']
   profile_image_url TEXT
   bio TEXT
   is_active BOOLEAN [default: true]
@@ -95,17 +96,21 @@ Table subscription_plans {
 // 権限管理
 // ========================================
 
-// 内部テーブルのため BIGSERIAL に修正
-Table user_roles {
+// ロールマスターテーブル
+Table roles {
   id BIGSERIAL [pk]
-  user_id UUID [not null, ref: > users.id]
-  role TEXT [not null, note: 'user, premium_user, moderator, admin, super_admin']
-  assigned_at TIMESTAMPTZ [default: `NOW()`]
-  assigned_by UUID [ref: > users.id]
+  name TEXT [unique, not null, note: 'anonymous, user, premium_user, moderator, admin, super_admin']
+  display_name TEXT [not null, note: '一般ユーザー, プレミアムユーザー, モデレーター, 管理者, 最高管理者']
+  description TEXT
+  level INTEGER [not null, note: '権限レベル（数値が高いほど強い権限）']
+  permissions JSONB [note: '具体的な権限設定']
+  is_active BOOLEAN [default: true]
+  created_at TIMESTAMPTZ [default: `NOW()`]
+  updated_at TIMESTAMPTZ [default: `NOW()`]
   
   indexes {
-    (user_id, role) [unique, name: 'uk_user_role']
-    user_id [name: 'idx_user_roles_user_id']
+    name [unique, name: 'uk_roles_name']
+    level [name: 'idx_roles_level']
   }
 }
 
