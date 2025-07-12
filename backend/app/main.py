@@ -1,10 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import Optional, List
-import os
-from dotenv import load_dotenv
-from app.core.config import settings
 from app.services.supabase import supabase_client
 
 
@@ -24,9 +19,11 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(admin.router)
 
+
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
+
 
 @app.get("/debug/connection")
 def debug_connection():
@@ -36,10 +33,7 @@ def debug_connection():
         return {
             "status": "connected",
             "data_count": len(response.data),
-            "raw_response": response
+            "raw_response": response,
         }
     except Exception as e:
-        return {
-            "status": "error",
-            "error": str(e)
-        }
+        return {"status": "error", "error": str(e)}

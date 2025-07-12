@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from app.core.dependencies import allow_anonymous
 from app.services.supabase import supabase_client
-from app.models.user import UserDetail
 from typing import Dict, Optional
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
+
 
 @router.get("/me")
 async def get_me(current_user: Optional[Dict] = Depends(allow_anonymous)):
@@ -13,17 +13,21 @@ async def get_me(current_user: Optional[Dict] = Depends(allow_anonymous)):
         return {
             "authenticated": False,
             "role": "anonymous",
-            "message": "Not authenticated"
+            "message": "Not authenticated",
         }
-    
+
     # 連携プロバイダー情報を取得
-    providers = supabase_client.table("user_providers").select("provider").eq(
-        "user_id", current_user["id"]
-    ).execute()
-    
+    providers = (
+        supabase_client.table("user_providers")
+        .select("provider")
+        .eq("user_id", current_user["id"])
+        .execute()
+    )
+
     current_user["linked_providers"] = [p["provider"] for p in providers.data]
-    
+
     return UserDetail(**current_user)
+
 
 @router.get("/verify")
 async def verify_session(current_user: Optional[Dict] = Depends(allow_anonymous)):
@@ -32,5 +36,5 @@ async def verify_session(current_user: Optional[Dict] = Depends(allow_anonymous)
         "authenticated": current_user.get("is_authenticated", False),
         "user_id": current_user.get("id"),
         "role": current_user.get("role", "anonymous"),
-        "role_level": current_user.get("role_level", 0)
+        "role_level": current_user.get("role_level", 0),
     }
