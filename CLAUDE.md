@@ -31,9 +31,9 @@ docker-compose up    # ルートとフロントエンドのコンテナを起動
 
 ### 主要な技術的決定事項
 - **フロントエンド**: Next.js 15
-- **バックエンド**: FastAPI（将来実装予定）
+- **バックエンド**: FastAPI
 - **データベース**: PostgreSQL（Supabase使用）
-- **認証**: Supabase Auth（NextAuth.jsは使用しない）
+- **認証**: Supabase Auth
 - **静的エクスポート**: サーバーなしでCDNデプロイ可能
 - **コンポーネントライブラリ**: 一貫性のあるアクセシブルなUIのためShadcn/ui使用
 - **フォーム処理**: React Hook Form + Zodでバリデーション
