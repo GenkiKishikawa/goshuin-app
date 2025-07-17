@@ -1,27 +1,27 @@
-{
-  "dockerComposeFile": "../docker-compose.yml",
-  "service": "backend",
-  "workspaceFolder": "/src",
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "GitHub.copilot",
-        "ms-python.debugpy",
-        "ms-python.python",
-        "ms-python.vscode-pylance"
-      ]
-    }
-  }
-}
 // {
 //   "dockerComposeFile": "../docker-compose.yml",
-//   "service": "root",
+//   "service": "backend",
 //   "workspaceFolder": "/src",
 //   "customizations": {
 //     "vscode": {
 //       "extensions": [
-//         "GitHub.copilot"
+//         "GitHub.copilot",
+//         "ms-python.debugpy",
+//         "ms-python.python",
+//         "ms-python.vscode-pylance"
 //       ]
 //     }
 //   }
 // }
+{
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "root",
+  "workspaceFolder": "/src",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "GitHub.copilot"
+      ]
+    }
+  }
+}
